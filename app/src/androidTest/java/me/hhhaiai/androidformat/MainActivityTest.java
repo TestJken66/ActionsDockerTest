@@ -12,8 +12,10 @@ import junit.framework.TestCase;
  */
 public class MainActivityTest extends TestCase {
 
-  // adb shell am instrument -w -m    -e debug false -e class 'me.hhhaiai.androidformat.MainActivityTest#testOnCreate' me.hhhaiai.androidformat.test/androidx.test.runner.AndroidJUnitRunner
-  public void testOnCreate() {
-    System.out.println("onCreate");
-  }
+    // adb shell am instrument -w -m    -e debug false -e class
+    // 'me.hhhaiai.androidformat.MainActivityTest#testOnCreate'
+    // me.hhhaiai.androidformat.test/androidx.test.runner.AndroidJUnitRunner
+    public void testOnCreate() {
+        System.out.println("onCreate");
+    }
 }

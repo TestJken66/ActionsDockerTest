@@ -1,8 +1,8 @@
 package me.hhhaiai.androidformat;
 
-import org.junit.Test;
-
 import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -12,7 +12,9 @@ import static org.junit.Assert.*;
  * adb shell am instrument -w -m  -e debug false -e class 'me.hhhaiai.androidformat.ExampleInstrumentedTest' me.hhhaiai.androidformat.test/androidx.test.runner.AndroidJUnitRunner
  */
 public class ExampleUnitTest {
-    //adb shell am instrument -w -m    -e debug false -e class 'me.hhhaiai.androidformat.ExampleInstrumentedTest#useAppContext' me.hhhaiai.androidformat.test/androidx.test.runner.AndroidJUnitRunner
+    // adb shell am instrument -w -m    -e debug false -e class
+    // 'me.hhhaiai.androidformat.ExampleInstrumentedTest#useAppContext'
+    // me.hhhaiai.androidformat.test/androidx.test.runner.AndroidJUnitRunner
     @Test
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
