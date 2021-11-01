@@ -40,3 +40,6 @@ sh.exe.stackdump
 */Key.java
 .vs/
 .vscode/
+
+format.txt
+google-java-format-1.12.0-all-deps.jar
