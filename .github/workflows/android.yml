@@ -18,10 +18,8 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
         cache: gradle
-
-    - name: Gradle build
+    - name: Docker build
       shell: bash
-      #continue-on-error: true
       run: |
         chmod -R 777 *
         git config core.filemode false
@@ -29,6 +27,17 @@ jobs:
         #base_dir=$(pwd)
         base_dir=`pwd`
         df -h
+        echo "================================================即将测试IP地址========================"
+        ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
+        echo "方式一获取ip： $ip"
+        ip2=$(ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:")
+        echo "方式二获取ip： $ip2"
+        curl ip.sb
+
+    - name: Docker build
+      shell: bash
+      #continue-on-error: true
+      run: |
         echo "=======================开始安装软件======================="
         # https://www.jianshu.com/p/da1c7dc4217a
         sudo apt-get update
@@ -38,12 +47,6 @@ jobs:
         sudo apt-get -y update
         sudo apt-get -y install docker-ce cpu-checker
 
-        echo "================================================即将测试IP地址========================"
-        ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
-        echo "方式一获取ip： $ip"
-        ip2=$(ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:")
-        echo "方式二获取ip： $ip2"
-        curl ip.sb
         ### export PATH
         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
         #sudo rm -rf /home/runner/work/_temp  /home/runner/work/_actions   /home/runner/work/_PipelineMapping
