@@ -89,6 +89,10 @@ jobs:
           adb kill-server
           adb start-server
           adb devices
+          adb root
+          adb remount
+          adb shell getprop
+          adb shell pm list package 
         fi
 
 
