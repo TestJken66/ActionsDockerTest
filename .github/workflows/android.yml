@@ -56,13 +56,14 @@ jobs:
          echo "================================安装python完毕，测试一下==================================="
          python --version
          python3 --version
-         #echo "================================克隆TestJken66/docker-android==================================="
-         #git clone  https://github.com/TestJken66/docker-android.git
-         #ls
-         #echo "=====运行TestJken66/docker-android============"
-         #cd  docker-android
-         #bash rs.sh
-         echo "==========docker-android安装完毕====即将拉取budtmo/docker-android-x86-8.1========="
+         echo "===========查看image=========================="
+         sudo docker image ls
+         echo "=================================查看所有容器==================================="
+         sudo docker ps -a
+         echo "=================================查看运行的容器==================================="
+         sudo docker ps
+         echo "==========即将拉取budtmo/docker-android-x86-8.1========="
+         sudo docker container rm -f budtmo/docker-android-x86-8.1
          sudo docker pull budtmo/docker-android-x86-8.1
          if [ $# == 0 ]; then
            echo "===========docker 拉取成功 查看image=========================="
