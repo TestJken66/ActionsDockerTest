@@ -81,8 +81,7 @@ jobs:
           adb start-server
           adb wait-for-device
           adb devices
-
-      # fi
+        fi
 
 
 
