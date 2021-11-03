@@ -96,7 +96,6 @@ jobs:
           echo "=================================安装模拟器完毕，adb查看设备==================================="
           for i in `seq 1 100`
           do
-              curl http://0.0.0.0:6080
               echo "运行次数: $i"
               adb kill-server
               adb start-server
