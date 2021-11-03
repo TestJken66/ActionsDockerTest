@@ -18,7 +18,8 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
         cache: gradle
-    - name: Docker build
+
+    - name: cats
       shell: bash
       run: |
         chmod -R 777 *
