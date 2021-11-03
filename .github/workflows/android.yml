@@ -86,7 +86,11 @@ jobs:
           adb start-server
           #adb wait-for-device
           adb devices
-          sleep 1m
+          sleep 4m
+          adb kill-server
+          adb start-server
+          adb devices
+          sleep 4m
           adb kill-server
           adb start-server
           adb devices
