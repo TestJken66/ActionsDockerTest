@@ -7,16 +7,8 @@ on:
 
 jobs:
   build:
-
-    name: Build on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ ubuntu-latest ]
-    # 如果提交WIP 就进行编译
+    runs-on: ubuntu-latest
     if: "!startsWith(github.event.head_commit.message, 'WIP')"
-
 
     steps:
     - uses: actions/checkout@v2
@@ -36,12 +28,18 @@ jobs:
         ./gradlew build
         echo "==========================查看目录==============="
         ls
-        echo "开始安装软件"
-        sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release
+        echo "=======================开始安装软件======================="
+        sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release net-tools
+        echo "=======================update======================="
         sudo apt-get update
-        sudo apt-get install net-tools docker docker-ce docker-ce-cli containerd.io
-        echo "安装软件完毕"
-        echo "即将测试命令 docker:"
+        echo "=======================UNAME======================="
+        uname -a
+        echo "=======================install dcoker======================="
+        sudo apt-get install docker-ce docker-ce-cli containerd.io
+        echo "=======================import gpg======================="
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        echo "====================================安装软件完毕========================"
+        echo "================================================即将测试命令 docker:========================"
         docker
         ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
         echo "方式一获取ip： $ip"
