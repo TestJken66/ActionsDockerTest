@@ -32,9 +32,13 @@ jobs:
         sudo apt-get update
         sudo apt-get -y install net-tools apt-transport-https ca-certificates curl software-properties-common
         curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
-        sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
-        sudo apt-get -y update
+        #sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
+        #sudo apt-get -y update
+        #sudo add-apt-repository  "deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/ $(lsb_release -cs) stable"
+        #sudo apt-get -y update
         sudo apt-get -y install docker-ce
+        sudo apt install cpu-checker
+        
         # #使用 apt-get 进行安装
         # # step 1: 安装必要的一些系统工具
         # sudo apt-get update
@@ -55,6 +59,7 @@ jobs:
         ## sudo apt-get -y install docker-ce=[VERSION]
         echo "=======================安装完毕，uname测试======================="
         uname -a
+        kvm-ok
         echo "================================================即将测试命令 docker:========================"
         docker
         echo "================================================即将测试 docker hello-world========================"
@@ -67,9 +72,11 @@ jobs:
         ### export PATH
         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
         echo "=========测试命令adb==========="
-        adb
-        echo "=========测试命令fastboot==========="
-        fastboot
+        adb devices
+        echo "=================================即将安装docker==================================="
+        docker run --privileged -d -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Samsung Galaxy S6" --name android-container budtmo/docker-android-x86-8.1
+        echo "=================================安装docker完毕，adb查看设备==================================="
+        adb devices
 
 
 
