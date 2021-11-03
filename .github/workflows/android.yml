@@ -92,7 +92,13 @@ jobs:
           adb root
           adb remount
           adb shell getprop
-          adb shell pm list package 
+          adb shell pm list package
+          echo "=================================curl https://www.google.com==================================="
+          curl https://www.google.com>googlx
+          cat googlx
+          echo "=================================curl http://0.0.0.0:6080==================================="
+          curl http://0.0.0.0:6080>gxxx
+          cat gxxx
         fi
 
 
