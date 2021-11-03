@@ -29,6 +29,7 @@ buildSrc/.gradle/
 local.properties
 *gen/
 *.classpath
+*.project
 
 #temp file
 *.bak
