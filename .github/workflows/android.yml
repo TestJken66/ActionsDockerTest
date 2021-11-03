@@ -32,8 +32,8 @@ jobs:
         sudo apt-get update
         sudo apt-get -y install net-tools apt-transport-https ca-certificates curl software-properties-common
         curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
-        #sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
-        #sudo apt-get -y update
+        sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
+        sudo apt-get -y update
         #sudo add-apt-repository  "deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/ $(lsb_release -cs) stable"
         #sudo apt-get -y update
         sudo apt-get -y install docker-ce
@@ -77,6 +77,7 @@ jobs:
         docker run --privileged -d -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Samsung Galaxy S6" --name android-container budtmo/docker-android-x86-8.1
         echo "=================================安装docker完毕，adb查看设备==================================="
         adb devices
+
 
 
 
