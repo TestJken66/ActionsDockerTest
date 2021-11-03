@@ -38,11 +38,12 @@ jobs:
         sudo apt-get -y update
         sudo apt-get -y install docker-ce cpu-checker
 
-        # echo "================================================即将测试IP地址========================"
-        # ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
-        # echo "方式一获取ip： $ip"
-        # ip2=$(ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:")
-        # echo "方式二获取ip： $ip2"
+        echo "================================================即将测试IP地址========================"
+        ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
+        echo "方式一获取ip： $ip"
+        ip2=$(ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:")
+        echo "方式二获取ip： $ip2"
+        curl ip.sb
         ### export PATH
         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
         #sudo rm -rf /home/runner/work/_temp  /home/runner/work/_actions   /home/runner/work/_PipelineMapping
@@ -52,19 +53,19 @@ jobs:
         sudo docker image ls
         echo "=================================查看所有容器==================================="
         sudo docker ps -a
-        echo "=================================查看/home/runner==================================="
-        ls /home/runner
-        echo "=================================查看/home/runner/work==================================="
-        ls /home/runner/work
-        echo "=================================查看/home/runner/work/_temp==================================="
-        ls /home/runner/work/_temp
-        echo "=================================查看/home/runner/work/_temp/*sh==================================="
-        find . -name "*.bat" -exec cat {} \;
+        # echo "=================================查看/home/runner==================================="
+        # ls /home/runner
+        # echo "=================================查看/home/runner/work==================================="
+        # ls /home/runner/work
+        # echo "=================================查看/home/runner/work/_temp==================================="
+        # ls /home/runner/work/_temp
+        # echo "=================================查看/home/runner/work/_temp/*sh==================================="
+        # find . -name "*.bat" -exec cat {} \;
         echo "=================================查看运行的容器==================================="
         sudo docker ps
         echo "==========即将拉取budtmo/docker-android-x86-8.1========="
-        sudo docker image rm -f  15ddf4b49c29 70055606aaca 9f5f1136afe0 1786d14e4bfa 31421e72129c 211bb86587c9 ba6acccedd29 e497bb3223cc a7f403d8dc77  225a237e64c2  5ddf6ebdcdb4 2b6f409b1d24  2b6f409b1d24  40eb33f80971  5a214d77f5d7 48b8ec4ed9eb  12adea71a33b  b6f507652425  14119a10abf4  aa67ba258e18  28dca6642db8
-        sudo docker container rm -f budtmo/docker-android-x86-8.1
+        # sudo docker image rm -f  15ddf4b49c29 70055606aaca 9f5f1136afe0 1786d14e4bfa 31421e72129c 211bb86587c9 ba6acccedd29 e497bb3223cc a7f403d8dc77  225a237e64c2  5ddf6ebdcdb4 2b6f409b1d24  2b6f409b1d24  40eb33f80971  5a214d77f5d7 48b8ec4ed9eb  12adea71a33b  b6f507652425  14119a10abf4  aa67ba258e18  28dca6642db8
+        # sudo docker container rm -f budtmo/docker-android-x86-8.1
         sudo docker pull budtmo/docker-android-x86-8.1
         if [ $# == 0 ]; then
           echo "===========docker 拉取成功 查看image=========================="
