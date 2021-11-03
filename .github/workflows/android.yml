@@ -1,6 +1,5 @@
 name: Android CI
 
-
 on:
   push:
     branches: [ main ]
@@ -99,8 +98,9 @@ jobs:
               echo "运行次数: $i"
               adb kill-server
               adb start-server
-              adb connect localhost:5555
               adb devices
+              adb root || true
+              adb remount || true
               sleep 1m
           done
 
