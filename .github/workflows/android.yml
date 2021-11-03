@@ -25,7 +25,7 @@ jobs:
       run: |
         chmod -R 777 *
         git config core.filemode false
-        ./gradlew :app:assemble
+        ./gradlew :app:preBuild
         #base_dir=$(pwd)
         base_dir=`pwd`
         df -h
@@ -45,7 +45,7 @@ jobs:
         # echo "方式二获取ip： $ip2"
         ### export PATH
         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-        sudo rm -rf /home/runner/work/_temp  /home/runner/work/_actions   /home/runner/work/_PipelineMapping
+        #sudo rm -rf /home/runner/work/_temp  /home/runner/work/_actions   /home/runner/work/_PipelineMapping
         echo "=========测试命令adb==========="
         adb devices
         echo "===========查看image=========================="
