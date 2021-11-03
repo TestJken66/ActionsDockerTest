@@ -94,14 +94,16 @@ jobs:
           sudo docker ps
           sudo docker container start android-container
           echo "=================================安装模拟器完毕，adb查看设备==================================="
-          adb kill-server
-          adb start-server
-          adb wait-for-device
-          adb devices
-          sleep 4m
-          adb kill-server
-          adb start-server
-          adb devices
+          for i in `seq 1 100`
+          do
+              curl http://0.0.0.0:6080
+              echo "运行次数: $i"
+              adb kill-server
+              adb start-server
+              adb devices
+              sleep 1m
+          done
+
           adb root
           adb remount
           adb shell getprop
