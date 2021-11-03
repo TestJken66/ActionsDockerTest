@@ -83,7 +83,11 @@ jobs:
           echo "=================================安装模拟器完毕，adb查看设备==================================="
           adb kill-server
           adb start-server
-          adb wait-for-device
+          #adb wait-for-device
+          adb devices
+          sleep 1m
+          adb kill-server
+          adb start-server
           adb devices
         fi
 
