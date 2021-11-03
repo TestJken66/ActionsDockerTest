@@ -29,60 +29,60 @@ jobs:
         #base_dir=$(pwd)
         base_dir=`pwd`
         df -h
-        # echo "=======================开始安装软件======================="
-        # # https://www.jianshu.com/p/da1c7dc4217a
-        # sudo apt-get update
-        # sudo apt-get -y install net-tools apt-transport-https ca-certificates curl software-properties-common
-        # curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
-        # sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
-        # sudo apt-get -y update
-        # sudo apt-get -y install docker-ce cpu-checker
+         echo "=======================开始安装软件======================="
+         # https://www.jianshu.com/p/da1c7dc4217a
+         sudo apt-get update
+         sudo apt-get -y install net-tools apt-transport-https ca-certificates curl software-properties-common
+         curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+         sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
+         sudo apt-get -y update
+         sudo apt-get -y install docker-ce cpu-checker
 
-        # echo "=======================安装完毕，uname测试======================="
-        # uname -a
-        # type kvm-ok
-        # # echo "================================================即将测试命令 docker:========================"
-        # # docker
-        # echo "================================================即将测试 docker hello-world========================"
-        # sudo docker run hello-world
-        # echo "================================================即将测试IP地址========================"
-        # ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
-        # echo "方式一获取ip： $ip"
-        # ip2=$(ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:")
-        # echo "方式二获取ip： $ip2"
-        # ### export PATH
-        # export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-        # echo "=========测试命令adb==========="
-        # adb devices
-        # echo "================================安装python==================================="
-        # sudo apt install python python3.8
-        # echo "================================安装python完毕，测试一下==================================="
-        # python --version
-        # python3 --version
-        # echo "================================克隆TestJken66/docker-android==================================="
-        # git clone  https://github.com/TestJken66/docker-android.git
-        # ls
-        # echo "=====运行TestJken66/docker-android============"
-        # cd  docker-android
-        # bash rs.sh
+         echo "=======================安装完毕，uname测试======================="
+         uname -a
+         type kvm-ok
+         # echo "================================================即将测试命令 docker:========================"
+         # docker
+         echo "================================================即将测试 docker hello-world========================"
+         sudo docker run hello-world
+         echo "================================================即将测试IP地址========================"
+         ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
+         echo "方式一获取ip： $ip"
+         ip2=$(ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:")
+         echo "方式二获取ip： $ip2"
+         ### export PATH
+         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
+         echo "=========测试命令adb==========="
+         adb devices
+         echo "================================安装python==================================="
+         sudo apt install python python3.8
+         echo "================================安装python完毕，测试一下==================================="
+         python --version
+         python3 --version
+         echo "================================克隆TestJken66/docker-android==================================="
+         git clone  https://github.com/TestJken66/docker-android.git
+         ls
+         echo "=====运行TestJken66/docker-android============"
+         cd  docker-android
+         bash rs.sh
 
-        # echo "==========docker-android安装完毕====即将拉取budtmo/docker-android-x86-8.1========="
-        # sudo docker pull budtmo/docker-android-x86-8.1
-        # if [ $# == 0 ]; then
-        #   echo "===========docker 拉取成功 查看image=========================="
-        #   sudo docker image ls
-        #   echo "=================================docker安装模拟器==================================="
-        #   sudo docker run --privileged -d -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Samsung Galaxy S6" --name android-container budtmo/docker-android-x86-8.1
-        #   echo "=================================安装模拟器完毕，查看所有容器==================================="
-        #   sudo docker ps -a
-        #   echo "=================================安装模拟器完毕，查看运行的容器==================================="
-        #   sudo docker ps
-        #   sudo docker con
-        #   sudo docker container start android-container
-        #   echo "=================================安装模拟器完毕，adb查看设备==================================="
-        #   adb kill-server
-        #   adb start-server
-        #   adb devices
+         echo "==========docker-android安装完毕====即将拉取budtmo/docker-android-x86-8.1========="
+         sudo docker pull budtmo/docker-android-x86-8.1
+         if [ $# == 0 ]; then
+           echo "===========docker 拉取成功 查看image=========================="
+           sudo docker image ls
+           echo "=================================docker安装模拟器==================================="
+           sudo docker run --privileged -d -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Samsung Galaxy S6" --name android-container budtmo/docker-android-x86-8.1
+           echo "=================================安装模拟器完毕，查看所有容器==================================="
+           sudo docker ps -a
+           echo "=================================安装模拟器完毕，查看运行的容器==================================="
+           sudo docker ps
+           sudo docker con
+           sudo docker container start android-container
+           echo "=================================安装模拟器完毕，adb查看设备==================================="
+           adb kill-server
+           adb start-server
+           adb devices
 
         # fi
 
