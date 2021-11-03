@@ -14,9 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-    #if: "!startsWith(github.event.head_commit.message, 'WID')"
-    #if: "! contains(github.event.head_commit.message, 'gitaction')"
-    #if: "contains(github.event.head_commit.message, '[build]')"
     # 如果提交WIP 就进行编译
     if: "!startsWith(github.event.head_commit.message, 'WIP')"
 
@@ -37,43 +34,26 @@ jobs:
         chmod -R 777 *
         git config core.filemode false
         ./gradlew build
+        echo "==========================查看目录==============="
+        ls
+        echo "开始安装软件"
+        sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release
+        sudo apt-get update
+        sudo apt-get install net-tools docker docker-ce docker-ce-cli containerd.io
+        echo "安装软件完毕"
+        echo "即将测试命令 docker:"
+        docker
+        ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
+        echo "方式一获取ip： $ip"
+        ip2=$(ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:")
+        echo "方式二获取ip： $ip2"
+        ### export PATH
+        export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
+        echo "=========测试命令adb==========="
+        adb
+        echo "=========测试命令fastboot==========="
+        fastboot
 
-  google-java-format:
-    name: Build on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ ubuntu-latest ]
-    #if: "!startsWith(github.event.head_commit.message, 'WID')"
-    #if: "! contains(github.event.head_commit.message, 'gitaction')"
-    #if: "contains(github.event.head_commit.message, '[build]')"
-    # 如果提交WIP 就进行编译
-    if: "!startsWith(github.event.head_commit.message, 'WIP')"
 
-    steps:
-      - uses: actions/checkout@v2
-      - name: set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-          cache: gradle
 
-      - name: google-java-format
-        shell: bash
-        continue-on-error: true
-        run: |
-          chmod -R 777 *
-          git config core.filemode false
-          wget https://repo1.maven.org/maven2/com/google/googlejavaformat/google-java-format/1.12.0/google-java-format-1.12.0-all-deps.jar
-          if [ $# == 0 ]; then
-            chmod -R 777 *
-            find . -name "*.java" -exec java -jar ./google-java-format-1.12.0-all-deps.jar -i -r -a --skip-reflowing-long-strings --skip-javadoc-formatting {} \;
-            git add .
-            git config --global user.name "qq"
-            git config --global user.email "qingquan.c@analysys.com.cn"
-            git commit -am "WIP: test upload"
-            git push
-          fi # end with down load process
 
