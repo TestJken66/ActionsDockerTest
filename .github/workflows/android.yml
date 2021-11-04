@@ -112,14 +112,14 @@ jobs:
           sleep 1m
           
         fi
-    - name: curl
-      shell: bash
-      continue-on-error: true
-      run: |
-        echo "=================================curl https://www.google.com==================================="
-        curl https://www.google.com
-        echo "=================================curl http://0.0.0.0:6080==================================="
-        curl http://0.0.0.0:6080
+#     - name: curl
+#       shell: bash
+#       continue-on-error: true
+#       run: |
+#         echo "=================================curl https://www.google.com==================================="
+#         curl https://www.google.com
+#         echo "=================================curl http://0.0.0.0:6080==================================="
+#         curl http://0.0.0.0:6080
 
     - name: Try Again
       shell: bash
@@ -135,7 +135,7 @@ jobs:
       shell: bash
       continue-on-error: true
       run: |
-        docker exec -it  ac bash| adb devices
+        docker exec ac adb devices
         
     - name: Try Again2
       shell: bash
