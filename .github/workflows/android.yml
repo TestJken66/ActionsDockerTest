@@ -135,7 +135,7 @@ jobs:
       shell: bash
       continue-on-error: true
       run: |
-        docker exec ac adb devices
+        docker exec ac12 adb devices
         
     - name: Try Again2
       shell: bash
