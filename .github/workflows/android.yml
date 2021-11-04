@@ -110,6 +110,11 @@ jobs:
           adb start-server
           adb devices
           sleep 1m
+          docker exec ac12 adb devices
+          echo "设备查看"
+          adb devices 
+          echo "模拟器查看"
+          emulator -list-avds
           
         fi
 #     - name: curl
@@ -121,29 +126,29 @@ jobs:
 #         echo "=================================curl http://0.0.0.0:6080==================================="
 #         curl http://0.0.0.0:6080
 
-    - name: Try Again
-      shell: bash
-      run: |
-        ### export PATH
-        export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-        echo "设备查看"
-        adb devices 
-        echo "模拟器查看"
-        emulator -list-avds
+#     - name: Try Again
+#       shell: bash
+#       run: |
+#         ### export PATH
+#         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
+#         echo "设备查看"
+#         adb devices 
+#         echo "模拟器查看"
+#         emulator -list-avds
 
-    - name: test
-      shell: bash
-      continue-on-error: true
-      run: |
-        docker exec ac12 adb devices
+#     - name: test
+#       shell: bash
+#       continue-on-error: true
+#       run: |
+#         docker exec ac12 adb devices
         
-    - name: Try Again2
-      shell: bash
-      run: |
-        ### export PATH
-        export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-        echo "设备查看"
-        adb devices 
-        echo "模拟器查看"
-        emulator -list-avds
+#     - name: Try Again2
+#       shell: bash
+#       run: |
+#         ### export PATH
+#         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
+#         echo "设备查看"
+#         adb devices 
+#         echo "模拟器查看"
+#         emulator -list-avds
 
