@@ -189,7 +189,8 @@ jobs:
         adb connect localhost:5555
         for i in `seq 1 100`
         do
-            echo "运行次数: $i"
+            echo "================运行次数: $i======================"
+            sudo docker ps
             adb kill-server
             adb start-server
             adb devices
