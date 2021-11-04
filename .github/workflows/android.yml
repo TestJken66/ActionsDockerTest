@@ -210,22 +210,13 @@ jobs:
         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
         sudo nohup docker run -d -e ADBKEY="$(cat ~/.android/adbkey)"  --privileged --publish 8554:8554/tcp  --publish 5555:5555/tcp  us-docker.pkg.dev/android-emulator-268719/images/30-google-x64:30.1.2 &        adb connect localhost:5555
         echo "==================will sleep================="
-        sudo chmod -R 777 nohup.out
+        sudo chmod -R 777 *
         sleep 1m
+        echo "==================after sleep 1m================="
+        ls
         echo "==================connect over================="
         adb connect localhost:5555
-        echo "=========================================================="
-        echo "=========================================================="
-        echo "=========================================================="
-        echo "==================see nohup.out================="
-        echo "=========================================================="
-        echo "=========================================================="
-        cat nohup.out
-        echo "=========================================================="
-        echo "=========================================================="
-        echo "=========================================================="
-        echo "=========================================================="
-        echo "=========================================================="
+      
         adb wait-for-device
         adb devices
         echo " ===========================getprop====================="
