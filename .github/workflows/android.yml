@@ -81,7 +81,7 @@ jobs:
         echo "==========即将拉取budtmo/docker-android-x86-8.1========="
         # sudo docker image rm -f  15ddf4b49c29 70055606aaca 9f5f1136afe0 1786d14e4bfa 31421e72129c 211bb86587c9 ba6acccedd29 e497bb3223cc a7f403d8dc77  225a237e64c2  5ddf6ebdcdb4 2b6f409b1d24  2b6f409b1d24  40eb33f80971  5a214d77f5d7 48b8ec4ed9eb  12adea71a33b  b6f507652425  14119a10abf4  aa67ba258e18  28dca6642db8
         # sudo docker container rm -f budtmo/docker-android-x86-8.1
-        sudo docker pull budtmo/docker-android-x86-8.1
+        sudo docker pull budtmo/docker-android-x86-12.0
         if [ $# == 0 ]; then
           echo "===========docker 拉取成功 查看image=========================="
           sudo docker image ls
@@ -93,7 +93,7 @@ jobs:
           sudo docker ps -a
           echo "=================================安装模拟器完毕，查看运行的容器==================================="
           sudo docker ps
-          sudo docker container start android-container
+          sudo docker container start ac12
           echo "=================================安装模拟器完毕，adb查看设备==================================="
           # for i in `seq 1 100`
           # do
