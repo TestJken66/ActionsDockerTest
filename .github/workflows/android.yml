@@ -59,7 +59,7 @@ jobs:
 
     - name: Docker build
       shell: bash
-      #continue-on-error: true
+      continue-on-error: true
       run: |
         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
         echo "=========测试命令adb==========="
@@ -109,21 +109,17 @@ jobs:
           adb kill-server
           adb start-server
           adb devices
-          adb root || true
-          adb remount || true
           sleep 1m
-          adb kill-server
-          adb start-server
-          adb devices
-          adb root || true
-          adb remount || true
-          adb shell getprop || true
-          adb shell pm list package || true
-          echo "=================================curl https://www.google.com==================================="
-          curl https://www.google.com
-          echo "=================================curl http://0.0.0.0:6080==================================="
-          curl http://0.0.0.0:6080
+          
         fi
+    - name: curl
+      shell: bash
+      continue-on-error: true
+      run: |
+        echo "=================================curl https://www.google.com==================================="
+        curl https://www.google.com
+        echo "=================================curl http://0.0.0.0:6080==================================="
+        curl http://0.0.0.0:6080
 
     - name: Try Again
       shell: bash
