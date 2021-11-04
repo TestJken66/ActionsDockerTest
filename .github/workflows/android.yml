@@ -149,6 +149,10 @@ jobs:
         echo "==============================================================="
         echo "ANDROID_HOME: ${ANDROID_HOME}"
         ls  ${ANDROID_HOME}
+        export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
+        adb kill-server
+        adb start-server
+        adb devices
         echo "================cat .android================"
         ls ~/.android/
 
