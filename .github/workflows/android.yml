@@ -24,12 +24,6 @@ jobs:
         chmod -R 777 *
         git config core.filemode false
         ./gradlew :app:preBuild
-        export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-        adb kill-server
-        adb start-server
-        adb devices
-        echo "查看 ~/.android 目录。。。"
-        ls ~/.android/
 
     - name: Prepare adb
       shell: bash
@@ -38,6 +32,8 @@ jobs:
         adb kill-server
         adb start-server
         adb devices
+        echo "查看 ~/.android 目录。。。"
+        ls ~/.android/
 
     - name: Get disk size
       shell: bash
@@ -88,11 +84,14 @@ jobs:
         sudo docker ps -a
         echo "=================================查看运行的容器==================================="
         sudo docker ps
+        echo "=================================链接并测试设备==================================="
         adb connect localhost:5555
         adb kill-server
         adb start-server
         adb devices
+        echo "=================================模拟器==================================="
         emulator -list-avds
+        emulator @"emulator-5554"
 
         # sudo docker image rm -f  15ddf4b49c29 70055606aaca 9f5f1136afe0 1786d14e4bfa 31421e72129c 211bb86587c9 ba6acccedd29 e497bb3223cc a7f403d8dc77  225a237e64c2  5ddf6ebdcdb4 2b6f409b1d24  2b6f409b1d24  40eb33f80971  5a214d77f5d7 48b8ec4ed9eb  12adea71a33b  b6f507652425  14119a10abf4  aa67ba258e18  28dca6642db8
         # sudo docker container rm -f budtmo/docker-android-x86-8.1
@@ -136,7 +135,7 @@ jobs:
       shell: bash
       continue-on-error: true
       run: |
-        docker exec ac12 ls -la
+        docker exec ac ls -la
 
 #   u_guest:
 #     runs-on: ubuntu-latest
