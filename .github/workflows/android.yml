@@ -29,9 +29,9 @@ jobs:
           git config core.filemode false
           ./gradlew build
     
-      # https://github.com/vgaidarji/android-github-actions-emulator
-      - name: "Run UI Tests"
-        uses: vgaidarji/android-github-actions-emulator@v1.0.1
+#      # https://github.com/vgaidarji/android-github-actions-emulator
+#       - name: "Run UI Tests"
+#         uses: vgaidarji/android-github-actions-emulator@v1.0.1
 
       # https://github.com/TestJken66/android-emulator-runner
       - name: run tests
