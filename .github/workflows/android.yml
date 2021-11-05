@@ -9,8 +9,21 @@ jobs:
   test:
     runs-on: macos-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - name: set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: gradle
+
+      - name: Buid
+        shell: bash
+        continue-on-error: true
+        run: |
+          chmod -R 777 *
+          git config core.filemode false
+          ./gradlew build
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
