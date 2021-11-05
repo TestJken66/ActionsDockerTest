@@ -28,6 +28,8 @@ jobs:
         adb kill-server
         adb start-server
         adb devices
+        echo "查看 ~/.android 目录。。。"
+        ls ~/.android/
 
     - name: Prepare adb
       shell: bash
@@ -63,8 +65,6 @@ jobs:
         sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
         sudo apt-get -y update
         sudo apt-get -y install docker-ce cpu-checker
-        export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-
 
     - name: Docker build
       shell: bash
@@ -80,8 +80,9 @@ jobs:
         echo "=================================查看运行的容器==================================="
         sudo docker ps
         echo "==========即将拉取budtmo/docker-android-x86-8.1========="
-        sudo docker run -d -e ADBKEY="$(cat ~/.android/adbkey)" --privileged --publish 8554:8554/tcp --publish 5555:5555/tcp  us-docker.pkg.dev/android-emulator-268719/images/30-google-x64
-         echo "===========查看image=========================="
+        #sudo docker run -d -e ADBKEY="$(cat ~/.android/adbkey)" --privileged --publish 8554:8554/tcp --publish 5555:5555/tcp  us-docker.pkg.dev/android-emulator-268719/images/30-google-x64
+        sudo docker run --privileged -d -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Nexus 5" --name ac budtmo/docker-android-x86-9.0
+        echo "===========查看image=========================="
         sudo docker image ls
         echo "=================================查看所有容器==================================="
         sudo docker ps -a
@@ -131,6 +132,11 @@ jobs:
         #   emulator -list-avds
         # fi
 
+    - name: Docker test
+      shell: bash
+      continue-on-error: true
+      run: |
+        docker exec ac12 ls -la
 
 #   u_guest:
 #     runs-on: ubuntu-latest
