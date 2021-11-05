@@ -28,13 +28,6 @@ jobs:
       - name: "Run UI Tests"
         uses: vgaidarji/android-github-actions-emulator@v1.0.1
       
-      - name: Runs
-        shell: bash
-        run: |
-          echo "-------------------------------------"
-          ./gradlew connectedAndroidTest
-          echo "-------------------------------------"
-
   # build:
   #   runs-on: ubuntu-latest
   #   if: "!startsWith(github.event.head_commit.message, 'WIP')"
