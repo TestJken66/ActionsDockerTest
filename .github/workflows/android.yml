@@ -10,9 +10,8 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        api-level: [ 21, 23, 29 ]
-        target: [ default, google_apis ]
-        arch: [ arm64-v8a, x86_64 ]
+        api-level: [21, 23, 29]
+        target: [default, google_apis]
     if: "!startsWith(github.event.head_commit.message, 'GitHubAction:')"
 
     steps:
@@ -40,8 +39,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          arch: ${{ steps.avd-info.outputs.arch }}
           target: ${{ steps.avd-info.outputs.target }}
+          arch: x86_64
           disable-animations: false
           force-avd-creation: false
           ram-size: 4096M
