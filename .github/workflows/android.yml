@@ -37,7 +37,13 @@ jobs:
             ./gradlew connectedCheck
             echo "==============2=================="
             adb devices
-          
+      - name: tsss
+        shell: bash
+        continue-on-error: true
+        run: |
+          brew  help
+
+
 #   ui_test1:
 #     runs-on: ubuntu-latest
 
