@@ -8,6 +8,13 @@ jobs:
   # https://github.com/ReactiveCircus/android-emulator-runner
   test:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        api-level: [ 21, 23, 29 ]
+        target: [ default, google_apis ]
+        arch: [ arm64-v8a, x86_64 ]
+    if: "!startsWith(github.event.head_commit.message, 'GitHubAction:')"
+
     steps:
       - uses: actions/checkout@v2
       - name: set up JDK 11
@@ -17,31 +24,56 @@ jobs:
           distribution: 'adopt'
           cache: gradle
 
-      - name: Buid
+      - name: Modify permission and Build
         shell: bash
         continue-on-error: true
         run: |
+          #git checkout dev
+          #bash syncSubmodule.sh
           chmod -R 777 *
           git config core.filemode false
-          ./gradlew build
+          ### export PATH
           export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
+          ./gradlew preBuild
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: ${{ matrix.api-level }}
+          arch: ${{ steps.avd-info.outputs.arch }}
+          target: ${{ steps.avd-info.outputs.target }}
+          disable-animations: false
+          force-avd-creation: false
+          ram-size: 4096M
+          profile: Nexus 5
           script: |
-            export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-            echo "==============1=================="
+            rm -rf ./build/
+            ./gradlew dev-sdk:connectedAndroidTest
+            echo "======================================"
             adb devices
-            ./gradlew connectedCheck
-            echo "==============2=================="
-            adb devices
-      - name: tsss
-        shell: bash
-        continue-on-error: true
-        run: |
-          brew  help
+            echo "======================================"
+            ls -la build/
+            echo "======================================"
+            echo "======================================"
+            cd build
+            ls -R *
+            
+#       - name: run tests
+#         uses: reactivecircus/android-emulator-runner@v2
+#         with:
+#           api-level: 29
+#           script: |
+#             export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
+#             echo "==============1=================="
+#             adb devices
+#             ./gradlew connectedCheck
+#             echo "==============2=================="
+#             adb devices
+#       - name: tsss
+#         shell: bash
+#         continue-on-error: true
+#         run: |
+#           brew  help
 
 
 #   ui_test1:
