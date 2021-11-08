@@ -43,6 +43,7 @@ jobs:
           arch: x86_64
           disable-animations: false
           force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           ram-size: 4096M
           profile: Nexus 5
           script: |
