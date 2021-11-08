@@ -9,7 +9,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        api-level: [21,22, 23,24,25,26,27,28 29]
+        api-level: [21,22, 23,24,25,26,27,28, 29]
     steps:
       - uses: actions/checkout@v2
       - name: set up JDK 11
@@ -53,6 +53,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
+          ram-size: 4096M
           script: |
             ./gradlew connectedAndroidTest mergeAndroidReports
             echo "==============build over==============="
