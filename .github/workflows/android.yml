@@ -5,59 +5,106 @@ on:
     branches: [ main ]
 
 jobs:
-  # https://github.com/ReactiveCircus/android-emulator-runner
   test:
     runs-on: macos-latest
     strategy:
       matrix:
         api-level: [21, 23, 29]
-        target: [default, google_apis]
-    if: "!startsWith(github.event.head_commit.message, 'GitHubAction:')"
-
     steps:
-      - uses: actions/checkout@v2
-      - name: set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-          cache: gradle
+      - name: checkout
+        uses: actions/checkout@v2
 
-      - name: Modify permission and Build
-        shell: bash
-        continue-on-error: true
-        run: |
-          #git checkout dev
-          #bash syncSubmodule.sh
-          chmod -R 777 *
-          git config core.filemode false
-          ### export PATH
-          export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-          ./gradlew preBuild
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
+
+      - name: AVD cache
+        uses: actions/cache@v2
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ steps.avd-info.outputs.target }}
-          arch: x86_64
-          disable-animations: false
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          ram-size: 4096M
-          profile: Nexus 5
-          script: |
-            rm -rf ./build/
-            ./gradlew dev-sdk:connectedAndroidTest
-            echo "======================================"
-            adb devices
-            echo "======================================"
-            ls -la build/
-            echo "======================================"
-            echo "======================================"
-            cd build
-            ls -R *
+          disable-animations: true
+          script: ./gradlew connectedCheck
+
+# jobs:
+#   # https://github.com/ReactiveCircus/android-emulator-runner
+#   test:
+#     runs-on: macos-latest
+#     strategy:
+#       matrix:
+#         api-level: [21, 23, 29]
+#         target: [default, google_apis]
+#     if: "!startsWith(github.event.head_commit.message, 'GitHubAction:')"
+
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: set up JDK 11
+#         uses: actions/setup-java@v2
+#         with:
+#           java-version: '11'
+#           distribution: 'adopt'
+#           cache: gradle
+
+#       - name: Modify permission and Build
+#         shell: bash
+#         continue-on-error: true
+#         run: |
+#           #git checkout dev
+#           #bash syncSubmodule.sh
+#           chmod -R 777 *
+#           git config core.filemode false
+#           ### export PATH
+#           export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
+#           ./gradlew preBuild
+
+#       - name: run tests
+#         uses: reactivecircus/android-emulator-runner@v2
+#         with:
+#           api-level: ${{ matrix.api-level }}
+#           target: ${{ steps.avd-info.outputs.target }}
+#           arch: x86_64
+#           disable-animations: false
+#           force-avd-creation: false
+#           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+#           ram-size: 4096M
+#           profile: Nexus 5
+#           script: |
+#             rm -rf ./build/
+#             ./gradlew dev-sdk:connectedAndroidTest
+#             echo "======================================"
+#             adb devices
+#             echo "======================================"
+#             ls -la build/
+#             echo "======================================"
+#             echo "======================================"
+#             cd build
+#             ls -R *
             
+
 #       - name: run tests
 #         uses: reactivecircus/android-emulator-runner@v2
 #         with:
@@ -69,11 +116,6 @@ jobs:
 #             ./gradlew connectedCheck
 #             echo "==============2=================="
 #             adb devices
-#       - name: tsss
-#         shell: bash
-#         continue-on-error: true
-#         run: |
-#           brew  help
 
 
 #   ui_test1:
