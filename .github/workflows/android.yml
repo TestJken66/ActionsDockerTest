@@ -50,6 +50,7 @@ jobs:
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
+        continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
           force-avd-creation: false
@@ -57,12 +58,11 @@ jobs:
           disable-animations: true
           ram-size: 4096M
           script: |
-            ./gradlew connectedAndroidTest mergeAndroidReports
+            ./gradlew connectedAndroidTest
             echo "==============build over==============="
             cd build/
-            ls -R *
             echo "==============catr==============="
-            echo  $ANDROID_HOME
+            tree
 
 # jobs:
 #   # https://github.com/ReactiveCircus/android-emulator-runner
