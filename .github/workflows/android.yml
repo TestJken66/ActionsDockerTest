@@ -73,7 +73,7 @@ jobs:
           disable-animations: true
           ram-size: 4096M
           script: |
-            ./gradlew connectedAndroidTest
+            ./gradlew connectedAndroidTest mergeAndroidReports
             echo "==============build over==============="
             ls
 
