@@ -76,6 +76,9 @@ jobs:
             ./gradlew connectedAndroidTest mergeAndroidReports
             echo "==============build over==============="
             ls
+            echo "==============cat build==============="
+            cd build
+            ls -R *
 
 # jobs:
 #   # https://github.com/ReactiveCircus/android-emulator-runner
