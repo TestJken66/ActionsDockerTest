@@ -75,7 +75,7 @@ jobs:
           script: |
             ./gradlew connectedAndroidTest
             echo "==============build over==============="
-            tree
+            ls
 
 # jobs:
 #   # https://github.com/ReactiveCircus/android-emulator-runner
