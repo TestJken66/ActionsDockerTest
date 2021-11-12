@@ -77,8 +77,7 @@ jobs:
             echo "==============build over==============="
             ls
             echo "==============cat build==============="
-            cd build
-            ls -R *
+            cd build&ls -R *
 
 # jobs:
 #   # https://github.com/ReactiveCircus/android-emulator-runner
