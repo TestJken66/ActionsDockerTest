@@ -75,8 +75,6 @@ jobs:
           script: |
             ./gradlew connectedAndroidTest
             echo "==============build over==============="
-            cd build/
-            echo "==============catr==============="
             tree
 
 # jobs:
