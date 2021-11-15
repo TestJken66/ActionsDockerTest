@@ -84,7 +84,7 @@ jobs:
             #######################################################################################################
             ######################################## upload files #################################################
             #######################################################################################################
-            file_name=lint_tree.txt
+            file_name=ut_result.tgz
             wget  https://github.com/hhhaiai/uploadGithub/releases/download/v1.1/uploadGithubService-1.1-jar-with-dependencies.jar
             dat=$(date "+%H%M%S")
             tpn=${{ github.repository }}
