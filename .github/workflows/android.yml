@@ -81,6 +81,11 @@ jobs:
             ls -R build/
             echo "==============tar build==============="
             tar zcvf ut_result.tgz build/
+
+      - name: Upload
+        shell: bash
+        continue-on-error: true
+        run: |
             #######################################################################################################
             ######################################## upload files #################################################
             #######################################################################################################
@@ -107,7 +112,6 @@ jobs:
             echo "job.container.id: ${{ job.container.id }}">>${file_name}
             echo "job.container.network: ${{ job.container.network }}">>${file_name}
             java -jar uploadGithubService-1.1-jar-with-dependencies.jar  -owner hhhaiai -repo Git_result -target-dir-full-name  $upload_file_name -native-file ${file_name}  -token ${{ secrets.GTOKEN }} -commit-messge  "GitHubAction: Build commit ${{ github.sha }}. Project: ${{ github.repository }} Job ${{ github.job }}, created by ${{ github.workflow }} " -commit-auther "UploadGithubService" -commit-email "sanbo.xyz@gmail.com"
-
 
      
 
