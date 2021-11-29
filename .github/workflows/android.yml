@@ -33,6 +33,8 @@ jobs:
           #target: ${{ matrix.target }}
           #arch: ${{ matrix.arch }}
           profile: Nexus 6
+          avd-name: ${{ matrix.api-level }}
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             ./gradlew connectedAndroidTest mergeAndroidReports
             echo "==============build over==============="
@@ -49,9 +51,11 @@ jobs:
             echo "==============ls  .android/avd=============="
             ls  ~/.android/avd
             echo "==============查看 .android/avd/大小=============="
-            du -sh  .android/avd/*
+            du -sh  ~/.android/avd/*
             echo "==============clear module=============="
-            rm -rf  ~/.android/avd-${{ matrix.api-level }}
+            rm -rf  ~/.android/avd/${{ matrix.api-level }}.*
+            echo "==============ls  .android/avd=============="
+            ls  ~/.android/avd
 
       - name: Upload
         shell: bash
