@@ -11,7 +11,8 @@ jobs:
     strategy:
       matrix:
         #api-level: [15, 16, 17, 18,19,20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
-        api-level: [ 20, 21, 22, 23 ]
+        api-level: [ 21, 23, 29 ]
+        target: [default, google_apis]
     steps:
       - uses: actions/checkout@v2
       - name: set up JDK 11
@@ -20,59 +21,14 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           cache: gradle
-#       # https://github.com/vgaidarji/android-github-actions-emulator
-#       - name: "Run UI Tests"
-#         uses: vgaidarji/android-github-actions-emulator@v1.0.1
-#         continue-on-error: true
-#         with:
-#           api-level: ${{ matrix.api-level }}
-#           force-avd-creation: false
-#           disable-animations: true
-#           ram-size: 4096M
-#           script: |
-#             ./gradlew connectedAndroidTest
-#             echo "==============build over==============="
-#             cd build/
-#             echo "==============catr==============="
-#             tree
-
-      - name: Gradle cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
-
-      - name: AVD cache
-        uses: actions/cache@v2
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
-
-#       - name: create AVD and generate snapshot for caching
-#         if: steps.avd-cache.outputs.cache-hit != 'true'
-#         uses: reactivecircus/android-emulator-runner@v2
-#         with:
-#           api-level: ${{ matrix.api-level }}
-#           force-avd-creation: false
-#           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-#           disable-animations: false
-#           script: echo "Generated AVD snapshot for caching."
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
-        continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          # ram-size: 4096M
-          arch: arm64-v8a
+          target: ${{ matrix.target }}
+          #arch: x86_64
+          profile: Nexus 6
           script: |
             ./gradlew connectedAndroidTest mergeAndroidReports
             echo "==============build over==============="
@@ -86,6 +42,30 @@ jobs:
             ls  ~/.android
             echo "==============clear module=============="
             rm -rf  ~/.android/avd-${{ matrix.api-level }}
+
+      # - name: run tests
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   continue-on-error: true
+      #   with:
+      #     api-level: ${{ matrix.api-level }}
+      #     force-avd-creation: false
+      #     emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+      #     disable-animations: true
+      #     # ram-size: 4096M
+      #     arch: arm64-v8a
+      #     script: |
+      #       ./gradlew connectedAndroidTest mergeAndroidReports
+      #       echo "==============build over==============="
+      #       ls
+      #       echo "==============cat build==============="
+      #       cd build
+      #       ls -R build/
+      #       echo "==============tar build==============="
+      #       tar zcvf ut_result.tgz build/
+      #       echo "==============ls .android/=============="
+      #       ls  ~/.android
+      #       echo "==============clear module=============="
+      #       rm -rf  ~/.android/avd-${{ matrix.api-level }}
             
 
       - name: Upload
@@ -120,338 +100,4 @@ jobs:
             java -jar uploadGithubService-1.1-jar-with-dependencies.jar  -owner hhhaiai -repo Git_result -target-dir-full-name  $upload_file_name -native-file ${file_name}  -token ${{ secrets.GTOKEN }} -commit-messge  "GitHubAction: Build commit ${{ github.sha }}. Project: ${{ github.repository }} Job ${{ github.job }}, created by ${{ github.workflow }} " -commit-auther "UploadGithubService" -commit-email "actions@github.com"
       
 
-          
-     
 
-# jobs:
-#   # https://github.com/ReactiveCircus/android-emulator-runner
-#   test:
-#     runs-on: macos-latest
-#     strategy:
-#       matrix:
-#         api-level: [21, 23, 29]
-#         target: [default, google_apis]
-#     if: "!startsWith(github.event.head_commit.message, 'GitHubAction:')"
-
-#     steps:
-#       - uses: actions/checkout@v2
-#       - name: set up JDK 11
-#         uses: actions/setup-java@v2
-#         with:
-#           java-version: '11'
-#           distribution: 'adopt'
-#           cache: gradle
-
-#       - name: Modify permission and Build
-#         shell: bash
-#         continue-on-error: true
-#         run: |
-#           #git checkout dev
-#           #bash syncSubmodule.sh
-#           chmod -R 777 *
-#           git config core.filemode false
-#           ### export PATH
-#           export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-#           ./gradlew preBuild
-
-#       - name: run tests
-#         uses: reactivecircus/android-emulator-runner@v2
-#         with:
-#           api-level: ${{ matrix.api-level }}
-#           target: ${{ steps.avd-info.outputs.target }}
-#           arch: x86_64
-#           disable-animations: false
-#           force-avd-creation: false
-#           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-#           ram-size: 4096M
-#           profile: Nexus 5
-#           script: |
-#             rm -rf ./build/
-#             ./gradlew dev-sdk:connectedAndroidTest
-#             echo "======================================"
-#             adb devices
-#             echo "======================================"
-#             ls -la build/
-#             echo "======================================"
-#             echo "======================================"
-#             cd build
-#             ls -R *
-            
-
-#       - name: run tests
-#         uses: reactivecircus/android-emulator-runner@v2
-#         with:
-#           api-level: 29
-#           script: |
-#             export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-#             echo "==============1=================="
-#             adb devices
-#             ./gradlew connectedCheck
-#             echo "==============2=================="
-#             adb devices
-
-
-#   ui_test1:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - uses: actions/checkout@v2
-#       - name: set up JDK 11
-#         uses: actions/setup-java@v2
-#         with:
-#           java-version: '11'
-#           distribution: 'adopt'
-#           cache: gradle
-
-#       - name: Prepare buid
-#         shell: bash
-#         continue-on-error: true
-#         run: |
-#           chmod -R 777 *
-#           git config core.filemode false
-#           ./gradlew build
-    
-#       # https://github.com/vgaidarji/android-github-actions-emulator
-#       - name: "Run UI Tests"
-#         uses: vgaidarji/android-github-actions-emulator@v1.0.1
-
-    
-
-  # build:
-  #   runs-on: ubuntu-latest
-  #   if: "!startsWith(github.event.head_commit.message, 'WIP')"
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: set up JDK 11
-  #     uses: actions/setup-java@v2
-  #     with:
-  #       java-version: '11'
-  #       distribution: 'adopt'
-  #       cache: gradle
-
-  #   - name: Prepare buid
-  #     shell: bash
-  #     run: |
-  #       chmod -R 777 *
-  #       git config core.filemode false
-  #       ./gradlew :app:preBuild
-
-  #   - name: Prepare adb
-  #     shell: bash
-  #     run: |
-  #       export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-  #       adb kill-server
-  #       adb start-server
-  #       adb devices
-  #       echo "查看 ~/.android 目录。。。"
-  #       ls ~/.android/
-
-  #   - name: Get disk size
-  #     shell: bash
-  #     run: |
-  #       df -h
-
-  #   - name: Get ip
-  #     shell: bash
-  #     run: |
-  #       echo "================================================即将测试IP地址========================"
-  #       ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
-  #       echo "方式一获取ip： $ip"
-  #       ip2=$(ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:")
-  #       echo "方式二获取ip： $ip2"
-  #       curl ip.sb
-
-  #   - name: Install apps
-  #     shell: bash
-  #     run: |
-  #       echo "=======================开始安装软件======================="
-  #       # https://www.jianshu.com/p/da1c7dc4217a
-  #       sudo apt-get update
-  #       sudo apt-get -y install net-tools apt-transport-https ca-certificates curl software-properties-common python python3.8
-  #       curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
-  #       sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
-  #       sudo apt-get -y update
-  #       sudo apt-get -y install docker-ce cpu-checker
-
-  #   - name: Docker build
-  #     shell: bash
-  #     continue-on-error: true
-  #     run: |
-  #       export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-  #       echo "=========测试命令adb==========="
-  #       adb devices
-  #       echo "===========查看image=========================="
-  #       sudo docker image ls
-  #       echo "=================================查看所有容器==================================="
-  #       sudo docker ps -a
-  #       echo "=================================查看运行的容器==================================="
-  #       sudo docker ps
-  #       echo "==========即将拉取budtmo/docker-android-x86-8.1========="
-  #       #sudo docker run -d -e ADBKEY="$(cat ~/.android/adbkey)" --privileged --publish 8554:8554/tcp --publish 5555:5555/tcp  us-docker.pkg.dev/android-emulator-268719/images/30-google-x64
-  #       sudo docker run --privileged -d -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Nexus 5" --name ac budtmo/docker-android-x86-9.0
-  #       echo "===========查看image=========================="
-  #       sudo docker image ls
-  #       echo "=================================查看所有容器==================================="
-  #       sudo docker ps -a
-  #       echo "=================================查看运行的容器==================================="
-  #       sudo docker ps
-  #       echo "=================================链接并测试设备==================================="
-  #       adb connect localhost:5555
-  #       adb kill-server
-  #       adb start-server
-  #       adb devices
-  #       echo "=================================模拟器查看==================================="
-  #       emulator -list-avds
-  #       #emulator @"emulator-5554"
-
-  #       # sudo docker image rm -f  15ddf4b49c29 70055606aaca 9f5f1136afe0 1786d14e4bfa 31421e72129c 211bb86587c9 ba6acccedd29 e497bb3223cc a7f403d8dc77  225a237e64c2  5ddf6ebdcdb4 2b6f409b1d24  2b6f409b1d24  40eb33f80971  5a214d77f5d7 48b8ec4ed9eb  12adea71a33b  b6f507652425  14119a10abf4  aa67ba258e18  28dca6642db8
-  #       # sudo docker container rm -f budtmo/docker-android-x86-8.1
-  #       # sudo docker pull budtmo/docker-android-x86-12.0
-  #       # if [ $# == 0 ]; then
-  #       #   echo "===========docker 拉取成功 查看image=========================="
-  #       #   sudo docker image ls
-  #       #   echo "=================================docker安装模拟器==================================="
-  #       #   #sudo docker run --privileged -d -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Samsung Galaxy S6" --name android-container budtmo/docker-android-x86-8.1
-  #       #   sudo docker run --privileged -d -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Nexus 5" --name ac12 budtmo/docker-android-x86-12.0
-        
-  #       #   echo "=================================安装模拟器完毕，查看所有容器==================================="
-  #       #   sudo docker ps -a
-  #       #   echo "=================================安装模拟器完毕，查看运行的容器==================================="
-  #       #   sudo docker ps
-  #       #   sudo docker container start ac12
-  #       #   echo "=================================安装模拟器完毕，adb查看设备==================================="
-  #       #   # for i in `seq 1 100`
-  #       #   # do
-  #       #   #     echo "运行次数: $i"
-  #       #   #     adb kill-server
-  #       #   #     adb start-server
-  #       #   #     adb devices
-  #       #   #     adb root || true
-  #       #   #     adb remount || true
-  #       #   #     sleep 1m
-  #       #   # done
-
-  #       #   adb kill-server
-  #       #   adb start-server
-  #       #   adb devices
-  #       #   sleep 1m
-  #       #   #docker exec ac12 adb devices
-  #       #   echo "设备查看"
-  #       #   adb devices 
-  #       #   echo "模拟器查看"
-  #       #   emulator -list-avds
-  #       # fi
-
-  #   - name: Docker test
-  #     shell: bash
-  #     continue-on-error: true
-  #     run: |
-  #       echo "docker 容器里查看。。。。"
-  #       docker exec ac ls -la
-  #       docker exec ac adb kill-server
-  #       docker exec ac adb start-server
-  #       docker exec ac adb devices
-  #       echo "===============wireless_autoconnect.sh=============="
-  #       docker exec ac cat wireless_autoconnect.sh
-  #       echo "===============wireless_connect.sh=============="
-  #       docker exec ac cat wireless_connect.sh
-  #       echo "===============generate_config.sh=============="
-  #       docker exec ac cat generate_config.sh
-  #       echo "===============entry_point.sh=============="
-  #       docker exec ac cat entry_point.sh
-  #       echo "===============supervisord.conf=============="
-  #       docker exec ac cat supervisord.conf
-
-  #   - name: rcheck adb
-  #     shell: bash
-  #     run: |
-  #       export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-  #       adb kill-server
-  #       adb start-server
-  #       adb devices
-
-#   u_guest:
-#     runs-on: ubuntu-latest
-#     if: "!startsWith(github.event.head_commit.message, 'WIP')"
-
-#     steps:
-#     - uses: actions/checkout@v2
-#     - name: set up JDK 11
-#       uses: actions/setup-java@v2
-#       with:
-#         java-version: '11'
-#         distribution: 'adopt'
-#         cache: gradle
-
-#     - name: Prepare buid
-#       shell: bash
-#       run: |
-#         chmod -R 777 *
-#         git config core.filemode false
-#         ./gradlew :app:preBuild
-
-#     - name: Get df
-#       shell: bash
-#       run: |
-#         df -h
-
-#     - name: test
-#       shell: bash
-#       run: |
-#         echo "==============================================================="
-#         echo "ANDROID_HOME: ${ANDROID_HOME}"
-#         ls  ${ANDROID_HOME}
-#         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-#         adb kill-server
-#         adb start-server
-#         adb devices
-#         echo "================cat .android================"
-#         ls ~/.android/
-
-#     - name: Get ip
-#       shell: bash
-#       run: |
-#         echo "================================================即将测试IP地址========================"
-#         ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
-#         echo "方式一获取ip： $ip"
-#         ip2=$(ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:")
-#         echo "方式二获取ip： $ip2"
-#         curl ip.sb
-
-#     - name: Install apps
-#       shell: bash
-#       run: |
-#         echo "=======================开始安装软件======================="
-#         # https://www.jianshu.com/p/da1c7dc4217a
-#         sudo apt-get update
-#         sudo apt-get -y install net-tools apt-transport-https ca-certificates curl software-properties-common python python3.8
-#         curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
-#         sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
-#         sudo apt-get -y update
-#         sudo apt-get -y install docker-ce cpu-checker
-#         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-
-#     - name: Docker build
-#       shell: bash
-#       continue-on-error: true
-#       run: |
-#         export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
-#         #sudo docker pull us-docker.pkg.dev/android-emulator-268719/images/28-playstore-x64:30.1.2
-#         #sudo nohup docker run -d -e ADBKEY="$(cat ~/.android/adbkey)" --privileged --publish 8554:8554/tcp --publish 5555:5555/tcp  us-docker.pkg.dev/android-emulator-268719/images/28-playstore-x64:30.1.2&
-#         sudo docker run -d -e ADBKEY="$(cat ~/.android/adbkey)" --privileged --publish 8554:8554/tcp --publish 5555:5555/tcp  --name ac12 us-docker.pkg.dev/android-emulator-268719/images/30-google-x64:30.1.2
-#         for i in `seq 1 3`
-#         do
-#             sudo docker container start ac12
-#             echo "================[$i]adb connect localhost:5555 ======================"
-#             adb connect localhost:5555
-#             echo "================[$i]docker ps -a ======================"
-#             sudo docker ps -a
-#             echo "================[$i]docker ps ======================"
-#             sudo docker ps
-#             echo "================运行次数: $i======================"
-#             adb kill-server
-#             adb start-server
-#             adb devices
-#             sleep 1m
-#         done
