@@ -36,6 +36,8 @@ jobs:
           avd-name: ${{ matrix.api-level }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
+            echo "==============tesxt-----=============="
+            sdkmanager --list
             ./gradlew connectedAndroidTest mergeAndroidReports
             echo "==============build over==============="
             ls
