@@ -36,7 +36,6 @@ jobs:
           script: |
             echo "==============[sdkmanager --list]=============="
             sdkmanager --list
-            file_name=ut_result_15_default_x86.tgz
             echo "==============connectedAndroidTest=============="
             ./gradlew connectedAndroidTest mergeAndroidReports
             echo "==============build over==============="
@@ -45,7 +44,7 @@ jobs:
             cd build
             ls -R build/
             echo "==============tar build==============="
-            tar zcvf ${file_name} build/
+            tar zcvf ut_result.tgz build/
             echo "==============ls .android/=============="
             ls  ~/.android
             echo "==============查看.android/大小=============="
@@ -61,6 +60,7 @@ jobs:
             #######################################################################################################
             ######################################## upload files #################################################
             #######################################################################################################
+            file_name=ut_result.tgz
             wget  https://github.com/hhhaiai/uploadGithub/releases/download/v1.1/uploadGithubService-1.1-jar-with-dependencies.jar
             dat=$(date "+%H%M%S")
             tpn=${{ github.repository }}
@@ -83,7 +83,8 @@ jobs:
             echo "job.container.id: ${{ job.container.id }}">>${file_name}
             echo "job.container.network: ${{ job.container.network }}">>${file_name}
             java -jar uploadGithubService-1.1-jar-with-dependencies.jar  -owner hhhaiai -repo Git_result -target-dir-full-name  $upload_file_name -native-file ${file_name}  -token ${{ secrets.GTOKEN }} -commit-messge  "GitHubAction: Build commit ${{ github.sha }}. Project: ${{ github.repository }} Job ${{ github.job }}, created by ${{ github.workflow }} " -commit-auther "UploadGithubService" -commit-email "actions@github.com"
-
+            rm -rf ut_result.tgz
+            
 
       - name: run tests[16-default-x86]
         uses: reactivecircus/android-emulator-runner@v2
@@ -97,7 +98,6 @@ jobs:
           script: |
             echo "==============[sdkmanager --list]=============="
             sdkmanager --list
-            file_name=ut_result_16_default_x86.tgz
             echo "==============connectedAndroidTest=============="
             ./gradlew connectedAndroidTest mergeAndroidReports
             echo "==============build over==============="
@@ -106,7 +106,7 @@ jobs:
             cd build
             ls -R build/
             echo "==============tar build==============="
-            tar zcvf ${file_name} build/
+            tar zcvf ut_result.tgz build/
             echo "==============ls .android/=============="
             ls  ~/.android
             echo "==============查看.android/大小=============="
@@ -122,6 +122,7 @@ jobs:
             #######################################################################################################
             ######################################## upload files #################################################
             #######################################################################################################
+            file_name=ut_result.tgz
             wget  https://github.com/hhhaiai/uploadGithub/releases/download/v1.1/uploadGithubService-1.1-jar-with-dependencies.jar
             dat=$(date "+%H%M%S")
             tpn=${{ github.repository }}
@@ -144,3 +145,5 @@ jobs:
             echo "job.container.id: ${{ job.container.id }}">>${file_name}
             echo "job.container.network: ${{ job.container.network }}">>${file_name}
             java -jar uploadGithubService-1.1-jar-with-dependencies.jar  -owner hhhaiai -repo Git_result -target-dir-full-name  $upload_file_name -native-file ${file_name}  -token ${{ secrets.GTOKEN }} -commit-messge  "GitHubAction: Build commit ${{ github.sha }}. Project: ${{ github.repository }} Job ${{ github.job }}, created by ${{ github.workflow }} " -commit-auther "UploadGithubService" -commit-email "actions@github.com"
+            rm -rf ut_result.tgz
+
