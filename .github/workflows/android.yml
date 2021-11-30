@@ -97,7 +97,7 @@ jobs:
           target: default
           arch: x86
           profile: Nexus 6
-          avd-name: ${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.arch }}
+          avd-name: default-x86
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             echo "==============[sdkmanager --list]=============="
@@ -120,7 +120,7 @@ jobs:
             echo "==============查看 .android/avd/大小=============="
             du -sh  ~/.android/avd/*
             echo "==============clear module=============="
-            rm -rf  ~/.android/avd/${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.arch }}.*
+            rm -rf  ~/.android/avd/default-x86.*
             echo "==============ls  .android/avd=============="
             ls  ~/.android/avd
       - name: Upload2
