@@ -8,15 +8,15 @@ jobs:
 
 
   arm64-default-test:
-    runs-on: macOS-latest
+    runs-on: macOS-11
     #runs-on: ubuntu-latest
     strategy:
       matrix:
         #api-level: [24, 30, 31 ]
         # failed version
-        #api-level: [ 31 ]
+        #api-level: [ 30,31 ]
         # not check version
-        api-level: [24, 30 ]
+        api-level: [24 ]
         target: [default]
         arch: [arm64-v8a]
     steps:

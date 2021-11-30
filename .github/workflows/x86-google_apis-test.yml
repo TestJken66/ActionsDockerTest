@@ -7,7 +7,7 @@ on:
 jobs:
 
   x86-google_apis-test:
-    runs-on: macOS-latest
+    runs-on: macOS-11
     #runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -15,7 +15,7 @@ jobs:
         # failed version
         #api-level: [19]
         # not check version
-        api-level: [ 17, 18, 21, 22,  24, 25, 26, 27, 28, 29, 30 ]
+        api-level: [ 18 ]
         target: [google_apis]
         arch: [x86]
     steps:
