@@ -13,9 +13,9 @@ jobs:
       matrix:
         #api-level: [28, 29, 30, 31, Sv2 ]
         # failed version
-        api-level: [Sv2 ]
+        #api-level: [Sv2 ]
         # not check version
-        #api-level: [28, 29, 30, 31]
+        api-level: [28, 29, 30, 31]
         target: [google_apis_playstore]
         arch: [x86_64]
     steps:
