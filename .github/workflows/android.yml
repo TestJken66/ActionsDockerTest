@@ -13,8 +13,8 @@ jobs:
       matrix:
         #api-level: [15, 16, 17, 18,19, 21, 22, 23, 24, 25, 26, 27, 28, 29 ]
         #api-level: [15, 16, 17, 18,19]
-        target: [default]
-        arch: [x86]
+        #target: [default]
+        #arch: [x86]
     steps:
       - uses: actions/checkout@v2
       - name: set up JDK 11
@@ -31,7 +31,7 @@ jobs:
           target: default
           arch: x86
           profile: Nexus 6
-          avd-name: ${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.arch }}
+          avd-name: default_x86
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             echo "==============[sdkmanager --list]=============="
@@ -54,9 +54,13 @@ jobs:
             echo "==============查看 .android/avd/大小=============="
             du -sh  ~/.android/avd/*
             echo "==============clear module=============="
-            rm -rf  ~/.android/avd/${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.arch }}.*
+            rm -rf  ~/.android/avd/default_x86.*
             echo "==============ls  .android/avd=============="
             ls  ~/.android/avd
+      - name: Upload1
+        shell: bash
+        continue-on-error: true
+        run: |
             #######################################################################################################
             ######################################## upload files #################################################
             #######################################################################################################
@@ -119,6 +123,10 @@ jobs:
             rm -rf  ~/.android/avd/${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.arch }}.*
             echo "==============ls  .android/avd=============="
             ls  ~/.android/avd
+      - name: Upload2
+        shell: bash
+        continue-on-error: true
+        run: |
             #######################################################################################################
             ######################################## upload files #################################################
             #######################################################################################################
